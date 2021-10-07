@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import * as Yup from 'yup'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { FormGroup, Button, FormControlLabel, Checkbox } from '@mui/material'
 
 import Label from './../Label/Label'
@@ -8,10 +11,12 @@ import BlockContainer from '../BlockContainer/BlockContainer'
 import InputField from '../InputField/InputField'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 
-const WorkPlaceForm = ({ deleteEl, id, register, errors }) => {
-	const [startDate, setStartDate] = useState('')
-	const [endDate, setEndDate] = useState('')
+const WorkPlaceForm = ({ setData, data, setError }) => {
+	const [startDate, setStartDate] = useState('Январь')
+	const [endDate, setEndDate] = useState('Январь')
 	const [showDate, setShowDate] = useState(false)
+
+	console.log('DATE: ', startDate, endDate)
 
 	const changeStartDate = (event) => {
 		setStartDate(event.target.value)
@@ -21,12 +26,47 @@ const WorkPlaceForm = ({ deleteEl, id, register, errors }) => {
 		setEndDate(event.target.value)
 	}
 
+	const ValidationSchema = Yup.object().shape({
+		startYear: Yup.number()
+			.required('Введите год')
+			.typeError('Введите год')
+			.positive('Значение не может быть отрицательным'),
+		nameCompany: Yup.string().required('Обязательное поле'),
+		position: Yup.string().required('Обязательное поле')
+	})
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors }
+	} = useForm({
+		resolver: yupResolver(ValidationSchema)
+	})
+
+	const onSubmit = (value) => {
+		console.log(value)
+		setData([
+			...data,
+			{ value, startDate, endDate, nowTime: showDate, id: Math.random() }
+		])
+	}
+
+	const onChange = () => {
+		setShowDate(!showDate)
+	}
+
 	return (
-		<>
+		<form onSubmit={handleSubmit(onSubmit)}>
 			<BlockContainer>
 				<Label label="Начало работы" />
-				<DatePanel value={startDate} handleChange={changeStartDate} />
+				<DatePanel
+					value={startDate}
+					handleChange={changeStartDate}
+					register={{ ...register('startYear') }}
+				/>
 			</BlockContainer>
+
+			{errors.startYear && <ErrorMessage error={errors.startYear?.message} />}
 			<BlockContainer>
 				<Label label="Окончание" />
 				<div>
@@ -34,17 +74,27 @@ const WorkPlaceForm = ({ deleteEl, id, register, errors }) => {
 						<FormControlLabel
 							control={<Checkbox defaultChecked />}
 							label="По настоящее время"
-							onChange={() => setShowDate(!showDate)}
+							onChange={onChange}
 						/>
 					</FormGroup>
 
 					{showDate && (
-						<DatePanel value={endDate} handleChange={changeEndDate} />
+						<DatePanel
+							value={endDate}
+							handleChange={changeEndDate}
+							register={{ ...register('endYear') }}
+						/>
 					)}
 				</div>
 			</BlockContainer>
-
-			<InputField placeholder="Название компании" label="Организация" />
+			<InputField
+				placeholder="Название компании"
+				label="Организация"
+				register={{ ...register('nameCompany') }}
+			/>
+			{errors.nameCompany && (
+				<ErrorMessage error={errors.nameCompany?.message} />
+			)}
 			<InputField
 				placeholder="Должность"
 				label="Должность"
@@ -54,19 +104,15 @@ const WorkPlaceForm = ({ deleteEl, id, register, errors }) => {
 			<TextArea
 				placeholder="Опишите ваши обязанности на рабочем месте"
 				label="Обязанности"
+				register={{ ...register('responsibilities') }}
 			/>
 			<BlockContainer>
 				<Label />
-				<Button
-					variant="outlined"
-					onClick={() => {
-						deleteEl(id)
-					}}
-				>
-					Удалить
+				<Button variant="outlined" type="submit" onClick={() => setError(null)}>
+					Добавить
 				</Button>
 			</BlockContainer>
-		</>
+		</form>
 	)
 }
 

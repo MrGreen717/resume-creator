@@ -5,7 +5,7 @@ import styles from './TextArea.module.scss'
 import BlockContainer from '../BlockContainer/BlockContainer'
 import Label from '../Label/Label'
 
-function TextArea({ label, placeholder }) {
+function TextArea({ label, placeholder, register }) {
 	return (
 		<BlockContainer>
 			<Label label={label} />
@@ -14,6 +14,7 @@ function TextArea({ label, placeholder }) {
 				id="outlined-textarea"
 				placeholder={placeholder}
 				multiline
+				{...register}
 			/>
 		</BlockContainer>
 	)

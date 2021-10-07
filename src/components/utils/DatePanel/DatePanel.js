@@ -3,7 +3,7 @@ import { FormControl, Select, MenuItem, TextField } from '@mui/material'
 
 import styles from './DatePanel.module.scss'
 
-function DatePanel({ value, handleChange }) {
+function DatePanel({ value, handleChange, register }) {
 	return (
 		<>
 			<FormControl>
@@ -14,7 +14,6 @@ function DatePanel({ value, handleChange }) {
 					value={value}
 					onChange={handleChange}
 				>
-					<MenuItem value="">Месяц</MenuItem>
 					<MenuItem value="Январь">Январь</MenuItem>
 					<MenuItem value="Февраль">Февраль</MenuItem>
 					<MenuItem value="Март">Март</MenuItem>
@@ -28,7 +27,13 @@ function DatePanel({ value, handleChange }) {
 					<MenuItem value="Декабрь">Декабрь</MenuItem>
 				</Select>
 			</FormControl>
-			<TextField className={styles.input} id="outlined" placeholder="Год" />
+			<TextField
+				className={styles.input}
+				type="number"
+				id="outlined"
+				placeholder="Год"
+				{...register}
+			/>
 		</>
 	)
 }

@@ -1,62 +1,38 @@
 import React, { useState } from 'react'
-import * as Yup from 'yup'
 import ButtonPanel from '../utils/ButtonPanel/ButtonPanel'
 import BlockContainer from '../utils/BlockContainer/BlockContainer'
-import {
-	FormControl,
-	RadioGroup,
-	Radio,
-	FormControlLabel,
-	Button
-} from '@mui/material'
+import { FormControl, RadioGroup, Radio, FormControlLabel } from '@mui/material'
 
 import styles from './ExperienceForm.module.scss'
 import Label from '../utils/Label/Label'
 import WorkPlaceForm from '../utils/WorkPlaceForm/WorkPlaceForm'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+import ErrorMessage from './../utils/ErrorMessage/ErrorMessage'
+import WorkPlace from '../WorkPlace/WorkPlace'
 
 const ExperienceForm = ({ setForm }) => {
 	const [experience, setExperience] = useState(false)
+	const [error, setError] = useState(null)
+	const [data, setData] = useState([])
 
-	const [workPlace, setWorkPlace] = useState([])
-
-	const addWorkPlaceForm = () => {
-		setWorkPlace([...workPlace, { id: workPlace.length + 1 }])
-	}
-
-	const deleteWorkPlaceForm = (id) => {
-		const newArr = workPlace.filter((el) => el.id !== id)
-		setWorkPlace(newArr)
+	const deleteWorkPlace = (id) => {
+		const newData = data.filter((el) => el.id !== id)
+		setData(newData)
 	}
 
 	const clearExperience = () => {
 		setExperience(false)
-		setWorkPlace([])
+		setData([])
+		setError(null)
 	}
 
-	const ValidationSchema = Yup.object().shape({
-		// startDate: Yup.date().required('Обязательное поле'),
-		// endDate: Yup.date().required('Обязательное поле'),
-		// nameCompany: Yup.string().required('Обязательное поле'),
-		// position: Yup.string().required('Обязательное поле')
-	})
-
-	const {
-		register,
-		handleSubmit,
-		formState: { errors }
-	} = useForm({
-		resolver: yupResolver(ValidationSchema)
-	})
-
-	const onSubmit = (data) => {
-		console.log(data)
-		setForm('education')
+	const onSubmit = () => {
+		data.length === 0 && experience
+			? setError({ message: 'Добавьте хотя бы одно место работы' })
+			: setForm('education')
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<>
 			<div className={styles.experienceForm}>
 				<h2>Опыт работы</h2>
 
@@ -66,16 +42,20 @@ const ExperienceForm = ({ setForm }) => {
 						<RadioGroup
 							className={styles.radio}
 							aria-label="experience"
-							name="controlled-radio-buttons-group"
+							id="experience"
+							name="experience"
+							defaultValue="without-experience"
 						>
 							<FormControlLabel
-								value="yes"
+								name="experience"
+								value="with-experience"
 								control={<Radio />}
 								label="Есть опыт работы"
 								onChange={() => setExperience(true)}
 							/>
 							<FormControlLabel
-								value="not"
+								name="experience"
+								value="without-experience"
 								control={<Radio />}
 								label="Нет опыта работы"
 								onChange={clearExperience}
@@ -83,26 +63,17 @@ const ExperienceForm = ({ setForm }) => {
 						</RadioGroup>
 					</FormControl>
 				</BlockContainer>
-				{workPlace.map((el) => (
-					<WorkPlaceForm
-						deleteEl={deleteWorkPlaceForm}
-						key={el.id}
-						id={el.id}
-						register={register}
-						errors={errors}
-					/>
+
+				{data.map((el) => (
+					<WorkPlace data={el} key={el.id} deleteWorkPlace={deleteWorkPlace} />
 				))}
 				{experience && (
-					<BlockContainer>
-						<Label />
-						<Button variant="outlined" onClick={addWorkPlaceForm}>
-							Добавить место работы
-						</Button>
-					</BlockContainer>
+					<WorkPlaceForm setError={setError} setData={setData} data={data} />
 				)}
-				<ButtonPanel label="Далее" />
+				{error && experience && <ErrorMessage error={error.message} />}
+				<ButtonPanel label="Далее" submitHandler={onSubmit} />
 			</div>
-		</form>
+		</>
 	)
 }
 

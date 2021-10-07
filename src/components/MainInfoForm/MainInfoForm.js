@@ -85,7 +85,11 @@ const MainInfoForm = ({ setForm }) => {
 				register={{ ...register('name') }}
 			/>
 			{errors.name && <ErrorMessage error={errors.name?.message} />}
-			<InputField placeholder="Отчество" label="Отчество" />
+			<InputField
+				placeholder="Отчество"
+				label="Отчество"
+				register={{ ...register('patronymic') }}
+			/>
 			<InputField
 				placeholder="Город проживания"
 				label="Город"
@@ -166,7 +170,11 @@ const MainInfoForm = ({ setForm }) => {
 				</div>
 			</BlockContainer>
 			{errors.salary && <ErrorMessage error={errors.salary?.message} />}
-			<TextArea placeholder="О себе" label="О себе" />
+			<TextArea
+				placeholder="О себе"
+				label="О себе"
+				register={{ ...register('info') }}
+			/>
 			<ButtonPanel label="Далее" />
 		</form>
 	)
