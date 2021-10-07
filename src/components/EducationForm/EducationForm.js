@@ -1,46 +1,57 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ButtonPanel from '../utils/ButtonPanel/ButtonPanel'
 import Label from './../utils/Label/Label'
-import { FormControl, Select, MenuItem, Button } from '@mui/material'
+import { FormControl, Select, MenuItem, TextField } from '@mui/material'
 import BlockContainer from '../utils/BlockContainer/BlockContainer'
-import InputField from '../utils/InputField/InputField'
 import LanguagePanel from '../utils/LanguagePanel/LanguagePanel'
 import InstitutionForm from '../utils/InstitutionForm/InstitutionForm'
 
+import ErrorMessage from './../utils/ErrorMessage/ErrorMessage'
+import Institution from '../utils/Institution/Institution'
+import Language from '../utils/Language/Language'
+
 const EducationForm = ({ setForm }) => {
 	const [level, setLevel] = useState('Высшее')
+	const [nativeLanguage, setNativeLanguage] = useState('')
+	const [error, setError] = useState(null)
+	const [errorLang, setErrorLang] = useState(null)
 	const [institution, setInstitution] = useState([])
-	const [language, setLanguage] = useState([])
+	const [languageArray, setLanguageArray] = useState([])
 
-	const addInstitutionForm = () => {
-		setInstitution([...institution, { id: institution.length + 1 }])
+	useEffect(() => {
+		nativeLanguage && setErrorLang(null)
+	}, [nativeLanguage])
+
+	const deleteInstitution = (id) => {
+		const newData = institution.filter((el) => el.id !== id)
+		setInstitution(newData)
 	}
 
-	const deleteInstitutionForm = (id) => {
-		const newArr = institution.filter((el) => el.id !== id)
-		setInstitution(newArr)
-	}
-
-	const addLanguageForm = () => {
-		console.log(language.length)
-		setLanguage([...language, { id: language.length + 1 }])
-	}
-
-	const deleteLanguageForm = (id) => {
-		const newArr = language.filter((el) => el.id !== id)
-		setLanguage(newArr)
+	const deleteLanguage = (id) => {
+		const newData = languageArray.filter((el) => el.id !== id)
+		setLanguageArray(newData)
 	}
 
 	const submitHandler = () => {
-		setForm('main')
+		if (!institution.length) {
+			setError({ message: 'Добавьте учебное заведение' })
+		} else if (!nativeLanguage.length) {
+			setErrorLang({ message: 'Заполните поле' })
+		} else {
+			setForm('main')
+		}
 	}
 
 	const handleChange = (event) => {
 		setLevel(event.target.value)
 	}
 
+	const changeNativeLanguage = (event) => {
+		setNativeLanguage(event.target.value)
+	}
+
 	return (
-		<div className="education">
+		<div>
 			<h2>Образование</h2>
 
 			<BlockContainer>
@@ -64,38 +75,48 @@ const EducationForm = ({ setForm }) => {
 					</Select>
 				</FormControl>
 			</BlockContainer>
-			<InputField
-				label="Учебное заведение"
-				placeholder="Название или аббревиатура"
-			/>
-			<InputField label="Факультет" placeholder="Факультет" />
-			<InputField label="Специализация" placeholder="Специализация" />
-			<InputField label="Год окончания" placeholder="Год" />
 			{institution.map((el) => (
-				<InstitutionForm
-					deleteEl={deleteInstitutionForm}
+				<Institution
 					key={el.id}
-					id={el.id}
+					data={el}
+					deleteInstitution={deleteInstitution}
 				/>
 			))}
+			<InstitutionForm
+				setInstitution={setInstitution}
+				institution={institution}
+				setError={setError}
+			/>
 			<BlockContainer>
-				<Label label="" />
-				<Button variant="outlined" onClick={addInstitutionForm}>
-					Добавить учебное заведение
-				</Button>
+				<Label label="Родной язык" />
+				<TextField
+					placeholder="Язык"
+					value={nativeLanguage}
+					onChange={changeNativeLanguage}
+				/>
 			</BlockContainer>
-
-			<InputField label="Родной язык" placeholder="Язык" />
+			{errorLang && <ErrorMessage error={errorLang.message} />}
 			<BlockContainer>
 				<Label label="Иностранные языки" />
-				<Button variant="outlined" onClick={addLanguageForm}>
-					Добавить язык
-				</Button>
+				{!languageArray.length ? (
+					<span>Добавьте язык...</span>
+				) : (
+					<span>Языки:</span>
+				)}
 			</BlockContainer>
-
-			{language.map((el) => (
-				<LanguagePanel deleteEl={deleteLanguageForm} key={el.id} id={el.id} />
-			))}
+			{languageArray.length
+				? languageArray.map((el) => (
+						<Language data={el} key={el.id} deleteLanguage={deleteLanguage} />
+				  ))
+				: null}
+			<BlockContainer>
+				<Label />
+				<LanguagePanel
+					setLanguageArray={setLanguageArray}
+					languageArray={languageArray}
+				/>
+			</BlockContainer>
+			{error && <ErrorMessage error={error.message} />}
 			<ButtonPanel label="Далее" submitHandler={submitHandler} />
 		</div>
 	)

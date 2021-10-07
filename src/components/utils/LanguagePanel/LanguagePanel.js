@@ -1,21 +1,42 @@
 import React, { useState } from 'react'
+import * as Yup from 'yup'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { TextField, FormControl, MenuItem, Button, Select } from '@mui/material'
+import BlockContainer from '../BlockContainer/BlockContainer'
 
 import styles from './LanguagePanel.module.scss'
-import BlockContainer from '../BlockContainer/BlockContainer'
-import Label from '../Label/Label'
 
-function LanguagePanel({ deleteEl, id }) {
+function LanguagePanel({ setLanguageArray, languageArray }) {
 	const [languageLevel, setLanguageLevel] = useState('A1-Начальный')
+
+	const ValidationSchema = Yup.object().shape({
+		language: Yup.string().required('Поле не может быть пустым')
+	})
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors }
+	} = useForm({
+		resolver: yupResolver(ValidationSchema)
+	})
+
 	const changeLanguageLevel = (event) => {
 		setLanguageLevel(event.target.value)
 	}
 
+	const onSubmit = (value) => {
+		setLanguageArray([
+			...languageArray,
+			{ languageLevel, value, id: Math.random() }
+		])
+	}
+
 	return (
-		<div className={styles.languagePanel}>
+		<form onSubmit={handleSubmit(onSubmit)}>
 			<BlockContainer>
-				<Label />
-				<TextField id="outlined" placeholder="Язык" />
+				<TextField id="outlined" placeholder="Язык" {...register('language')} />
 				<FormControl>
 					<Select
 						labelId="select-label"
@@ -34,16 +55,16 @@ function LanguagePanel({ deleteEl, id }) {
 						<MenuItem value="C2-В совершенстве">C2-В совершенстве</MenuItem>
 					</Select>
 				</FormControl>
-				<Button
-					variant="outlined"
-					onClick={() => {
-						deleteEl(id)
-					}}
-				>
-					Удалить
+			</BlockContainer>
+			{errors.language && (
+				<span className={styles.error}>{errors.language?.message}</span>
+			)}
+			<BlockContainer>
+				<Button variant="outlined" type="submit">
+					Добавить
 				</Button>
 			</BlockContainer>
-		</div>
+		</form>
 	)
 }
 

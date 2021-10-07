@@ -16,8 +16,6 @@ const WorkPlaceForm = ({ setData, data, setError }) => {
 	const [endDate, setEndDate] = useState('Январь')
 	const [showDate, setShowDate] = useState(false)
 
-	console.log('DATE: ', startDate, endDate)
-
 	const changeStartDate = (event) => {
 		setStartDate(event.target.value)
 	}
@@ -65,7 +63,6 @@ const WorkPlaceForm = ({ setData, data, setError }) => {
 					register={{ ...register('startYear') }}
 				/>
 			</BlockContainer>
-
 			{errors.startYear && <ErrorMessage error={errors.startYear?.message} />}
 			<BlockContainer>
 				<Label label="Окончание" />

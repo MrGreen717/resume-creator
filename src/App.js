@@ -15,7 +15,6 @@ function App() {
 				{form === 'main' && <MainInfoForm setForm={setForm} />}
 				{form === 'experience' && <ExperienceForm setForm={setForm} />}
 				{form === 'education' && <EducationForm setForm={setForm} />}
-				{/* {form === 'education' && <EducationForm />} */}
 			</div>
 		</div>
 	)

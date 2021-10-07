@@ -7,7 +7,7 @@ import styles from './ExperienceForm.module.scss'
 import Label from '../utils/Label/Label'
 import WorkPlaceForm from '../utils/WorkPlaceForm/WorkPlaceForm'
 import ErrorMessage from './../utils/ErrorMessage/ErrorMessage'
-import WorkPlace from '../WorkPlace/WorkPlace'
+import WorkPlace from '../utils/WorkPlace/WorkPlace'
 
 const ExperienceForm = ({ setForm }) => {
 	const [experience, setExperience] = useState(false)
@@ -26,7 +26,7 @@ const ExperienceForm = ({ setForm }) => {
 	}
 
 	const onSubmit = () => {
-		data.length === 0 && experience
+		!data.length && experience
 			? setError({ message: 'Добавьте хотя бы одно место работы' })
 			: setForm('education')
 	}

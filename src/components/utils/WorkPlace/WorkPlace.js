@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@mui/material'
-import BlockContainer from '../utils/BlockContainer/BlockContainer'
-import Label from '../utils/Label/Label'
+import BlockContainer from '../BlockContainer/BlockContainer'
+import Label from '../Label/Label'
 
 import styles from './WorkPlace.module.scss'
 
@@ -41,7 +41,6 @@ function WorkPlace({ data, deleteWorkPlace }) {
 					<span>{data.value.responsibilities}</span>
 				</BlockContainer>
 			)}
-
 			<BlockContainer>
 				<Label />
 				<Button
