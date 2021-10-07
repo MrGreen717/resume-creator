@@ -1,0 +1,12 @@
+.buttonPanel {
+	display: flex;
+	justify-content: center;
+	max-width: 650px;
+	margin-top: 25px;
+
+	button {
+		width: 130px;
+		padding: 10px;
+		color: rgb(126, 126, 126);
+	}
+}

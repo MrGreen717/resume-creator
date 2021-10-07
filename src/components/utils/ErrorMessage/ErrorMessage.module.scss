@@ -1,0 +1,10 @@
+.errorPanel {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	margin-top: 3px;
+
+	.error {
+		color: red;
+	}
+}

@@ -1,0 +1,14 @@
+.age {
+	display: flex;
+	box-sizing: border-box;
+	max-width: 300px;
+
+	.input {
+		max-width: 10rem;
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
+}

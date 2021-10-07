@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+
+import styles from './App.module.scss'
+import EducationForm from './components/EducationForm/EducationForm'
+import ExperienceForm from './components/ExperienceForm/ExperienceForm'
+import MainInfoForm from './components/MainInfoForm/MainInfoForm'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [form, setForm] = useState('main')
+
+	return (
+		<div className="App">
+			<div className={styles.form}>
+				<h1>Ваше резюме</h1>
+				{form === 'main' && <MainInfoForm setForm={setForm} />}
+				{form === 'experience' && <ExperienceForm setForm={setForm} />}
+				{form === 'education' && <EducationForm setForm={setForm} />}
+				{/* {form === 'education' && <EducationForm />} */}
+			</div>
+		</div>
+	)
 }
 
-export default App;
+export default App
