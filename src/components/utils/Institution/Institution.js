@@ -5,7 +5,7 @@ import Label from '../Label/Label'
 
 import styles from './Institution.module.scss'
 
-function Institution({ data, deleteInstitution }) {
+function Institution({ data, deleteInstitution, removable }) {
 	return (
 		<div className={styles.institution}>
 			<BlockContainer>
@@ -24,19 +24,20 @@ function Institution({ data, deleteInstitution }) {
 				<Label label="Год окончания" />
 				<span>{data.value.year}</span>
 			</BlockContainer>
-
-			<BlockContainer>
-				<Label />
-				<Button
-					variant="outlined"
-					type="submit"
-					onClick={() => {
-						deleteInstitution(data.id)
-					}}
-				>
-					Удалить
-				</Button>
-			</BlockContainer>
+			{removable && (
+				<BlockContainer>
+					<Label />
+					<Button
+						variant="outlined"
+						type="submit"
+						onClick={() => {
+							deleteInstitution(data.id)
+						}}
+					>
+						Удалить
+					</Button>
+				</BlockContainer>
+			)}
 		</div>
 	)
 }

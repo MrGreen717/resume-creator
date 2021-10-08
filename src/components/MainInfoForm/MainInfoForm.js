@@ -21,7 +21,7 @@ import ErrorMessage from './../utils/ErrorMessage/ErrorMessage'
 
 import styles from './MainInfoForm.module.scss'
 
-const MainInfoForm = ({ setForm }) => {
+const MainInfoForm = ({ setForm, setMainInfo }) => {
 	const [currency, setCurrency] = useState('руб.')
 	const [month, setMonth] = useState('Января')
 
@@ -64,7 +64,8 @@ const MainInfoForm = ({ setForm }) => {
 			month,
 			currency
 		}
-		console.log('Data', info)
+
+		setMainInfo(info)
 		setForm('experience')
 	}
 	return (
@@ -115,14 +116,14 @@ const MainInfoForm = ({ setForm }) => {
 					>
 						<FormControlLabel
 							name="gender"
-							value="male"
+							value="Мужской"
 							control={<Radio />}
 							label="Мужской"
 							{...register('gender')}
 						/>
 						<FormControlLabel
 							name="gender"
-							value="female"
+							value="Женский"
 							control={<Radio />}
 							label="Женский"
 							{...register('gender')}

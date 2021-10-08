@@ -9,7 +9,7 @@ import WorkPlaceForm from '../utils/WorkPlaceForm/WorkPlaceForm'
 import ErrorMessage from './../utils/ErrorMessage/ErrorMessage'
 import WorkPlace from '../utils/WorkPlace/WorkPlace'
 
-const ExperienceForm = ({ setForm }) => {
+const ExperienceForm = ({ setForm, setExperienceInfo }) => {
 	const [experience, setExperience] = useState(false)
 	const [error, setError] = useState(null)
 	const [data, setData] = useState([])
@@ -25,10 +25,15 @@ const ExperienceForm = ({ setForm }) => {
 		setError(null)
 	}
 
+	const submitHandler = () => {
+		setExperienceInfo(data)
+		setForm('education')
+	}
+
 	const onSubmit = () => {
 		!data.length && experience
 			? setError({ message: 'Добавьте хотя бы одно место работы' })
-			: setForm('education')
+			: submitHandler()
 	}
 
 	return (
@@ -65,7 +70,12 @@ const ExperienceForm = ({ setForm }) => {
 				</BlockContainer>
 
 				{data.map((el) => (
-					<WorkPlace data={el} key={el.id} deleteWorkPlace={deleteWorkPlace} />
+					<WorkPlace
+						data={el}
+						key={el.id}
+						deleteWorkPlace={deleteWorkPlace}
+						removable={true}
+					/>
 				))}
 				{experience && (
 					<WorkPlaceForm setError={setError} setData={setData} data={data} />

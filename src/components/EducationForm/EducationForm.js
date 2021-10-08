@@ -10,7 +10,12 @@ import ErrorMessage from './../utils/ErrorMessage/ErrorMessage'
 import Institution from '../utils/Institution/Institution'
 import Language from '../utils/Language/Language'
 
-const EducationForm = ({ setForm }) => {
+const EducationForm = ({
+	setForm,
+	setInstitutionInfo,
+	setLanguageInfo,
+	setEducationInfo
+}) => {
 	const [level, setLevel] = useState('Высшее')
 	const [nativeLanguage, setNativeLanguage] = useState('')
 	const [error, setError] = useState(null)
@@ -38,7 +43,13 @@ const EducationForm = ({ setForm }) => {
 		} else if (!nativeLanguage.length) {
 			setErrorLang({ message: 'Заполните поле' })
 		} else {
-			setForm('main')
+			setForm('review')
+			setInstitutionInfo(institution)
+			setLanguageInfo(languageArray)
+			setEducationInfo({
+				level,
+				nativeLanguage
+			})
 		}
 	}
 
@@ -80,6 +91,7 @@ const EducationForm = ({ setForm }) => {
 					key={el.id}
 					data={el}
 					deleteInstitution={deleteInstitution}
+					removable={true}
 				/>
 			))}
 			<InstitutionForm
@@ -98,17 +110,17 @@ const EducationForm = ({ setForm }) => {
 			{errorLang && <ErrorMessage error={errorLang.message} />}
 			<BlockContainer>
 				<Label label="Иностранные языки" />
-				{!languageArray.length ? (
-					<span>Добавьте язык...</span>
-				) : (
-					<span>Языки:</span>
-				)}
+				<div>
+					{languageArray.map((el) => (
+						<Language
+							data={el}
+							key={el.id}
+							deleteLanguage={deleteLanguage}
+							removable={true}
+						/>
+					))}
+				</div>
 			</BlockContainer>
-			{languageArray.length
-				? languageArray.map((el) => (
-						<Language data={el} key={el.id} deleteLanguage={deleteLanguage} />
-				  ))
-				: null}
 			<BlockContainer>
 				<Label />
 				<LanguagePanel

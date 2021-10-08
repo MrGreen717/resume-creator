@@ -5,7 +5,7 @@ import Label from '../Label/Label'
 
 import styles from './WorkPlace.module.scss'
 
-function WorkPlace({ data, deleteWorkPlace }) {
+function WorkPlace({ data, deleteWorkPlace, removable }) {
 	return (
 		<div className={styles.workPlace}>
 			<BlockContainer>
@@ -41,18 +41,20 @@ function WorkPlace({ data, deleteWorkPlace }) {
 					<span>{data.value.responsibilities}</span>
 				</BlockContainer>
 			)}
-			<BlockContainer>
-				<Label />
-				<Button
-					variant="outlined"
-					type="submit"
-					onClick={() => {
-						deleteWorkPlace(data.id)
-					}}
-				>
-					Удалить
-				</Button>
-			</BlockContainer>
+			{removable && (
+				<BlockContainer>
+					<Label />
+					<Button
+						variant="outlined"
+						type="submit"
+						onClick={() => {
+							deleteWorkPlace(data.id)
+						}}
+					>
+						Удалить
+					</Button>
+				</BlockContainer>
+			)}
 		</div>
 	)
 }
