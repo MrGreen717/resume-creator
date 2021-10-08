@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
+import { FormControl, RadioGroup, Radio, FormControlLabel } from '@mui/material'
 import ButtonPanel from '../utils/ButtonPanel/ButtonPanel'
 import BlockContainer from '../utils/BlockContainer/BlockContainer'
-import { FormControl, RadioGroup, Radio, FormControlLabel } from '@mui/material'
-
-import styles from './ExperienceForm.module.scss'
 import Label from '../utils/Label/Label'
 import WorkPlaceForm from '../utils/WorkPlaceForm/WorkPlaceForm'
 import ErrorMessage from './../utils/ErrorMessage/ErrorMessage'
 import WorkPlace from '../utils/WorkPlace/WorkPlace'
+
+import styles from './ExperienceForm.module.scss'
 
 const ExperienceForm = ({ setForm, setExperienceInfo }) => {
 	const [experience, setExperience] = useState(false)

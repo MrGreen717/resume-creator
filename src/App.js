@@ -8,11 +8,8 @@ import ReviewForm from './components/ReviewForm/ReviewForm'
 
 function App() {
 	const [form, setForm] = useState('main')
-
 	const [mainInfo, setMainInfo] = useState(null)
-
 	const [experienceInfo, setExperienceInfo] = useState([])
-
 	const [institutionInfo, setInstitutionInfo] = useState([])
 	const [languageInfo, setLanguageInfo] = useState([])
 	const [educationInfo, setEducationInfo] = useState(null)

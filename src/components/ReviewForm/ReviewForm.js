@@ -4,6 +4,9 @@ import Institution from '../utils/Institution/Institution'
 import Label from './../utils/Label/Label'
 import Language from './../utils/Language/Language'
 import WorkPlace from './../utils/WorkPlace/WorkPlace'
+import ButtonPanel from './../utils/ButtonPanel/ButtonPanel'
+
+import styles from './ReviewForm.module.scss'
 
 const ReviewForm = ({
 	setForm,
@@ -13,14 +16,13 @@ const ReviewForm = ({
 	languageInfo,
 	educationInfo
 }) => {
-	console.log(mainInfo)
-	console.log(experienceInfo)
-	console.log(institutionInfo)
-	console.log(languageInfo)
-	console.log(educationInfo)
 	return (
-		<div>
+		<div className={styles.reviewForm}>
 			<h2>Основная информация</h2>
+			<BlockContainer>
+				<Label label="Ваша фотография" />
+				<img src={mainInfo.image} alt="img" />
+			</BlockContainer>
 			<BlockContainer>
 				<Label label="Фамилия" />
 				<span>{mainInfo.data.surname}</span>
@@ -69,7 +71,7 @@ const ReviewForm = ({
 					<span>{mainInfo.data.info}</span>
 				</BlockContainer>
 			)}
-			{experienceInfo && <h2>Опыт работы</h2>}
+			{experienceInfo.length ? <h2>Опыт работы</h2> : null}
 			{experienceInfo &&
 				experienceInfo.map((el) => <WorkPlace data={el} key={el.id} />)}
 			<h2>Образование</h2>
@@ -84,14 +86,21 @@ const ReviewForm = ({
 				<Label label="Родной язык" />
 				<span>{educationInfo.nativeLanguage}</span>
 			</BlockContainer>
-			<BlockContainer>
-				<Label label="Иностранные языки" />
-				<div>
-					{languageInfo.map((el) => (
-						<Language data={el} key={el.id} />
-					))}
-				</div>
-			</BlockContainer>
+			{languageInfo.length ? (
+				<BlockContainer>
+					<Label label="Иностранные языки" />
+					<div>
+						{languageInfo.map((el) => (
+							<Language data={el} key={el.id} />
+						))}
+					</div>
+				</BlockContainer>
+			) : null}
+
+			<ButtonPanel
+				label="Создать новое резюме"
+				submitHandler={() => setForm('main')}
+			/>
 		</div>
 	)
 }

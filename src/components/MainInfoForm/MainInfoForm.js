@@ -24,9 +24,15 @@ import styles from './MainInfoForm.module.scss'
 const MainInfoForm = ({ setForm, setMainInfo }) => {
 	const [currency, setCurrency] = useState('руб.')
 	const [month, setMonth] = useState('Января')
+	const [image, setImage] = useState(null)
 
 	const handleChange = (event) => {
 		setCurrency(event.target.value)
+	}
+
+	const onImageChange = (event) => {
+		let img = event.target.files[0]
+		setImage(URL.createObjectURL(img))
 	}
 
 	const ValidationSchema = Yup.object().shape({
@@ -62,7 +68,8 @@ const MainInfoForm = ({ setForm, setMainInfo }) => {
 		const info = {
 			data,
 			month,
-			currency
+			currency,
+			image
 		}
 
 		setMainInfo(info)
@@ -71,7 +78,17 @@ const MainInfoForm = ({ setForm, setMainInfo }) => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<h2>Основная информация</h2>
-			<InputField placeholder="Ваша фотография" label="Ваша фотография" />
+			<BlockContainer>
+				<Label label="Ваша фотография" />
+
+				<TextField type="file" onChange={onImageChange} />
+			</BlockContainer>
+			{image && (
+				<BlockContainer>
+					<Label />
+					<img src={image} alt="img" />
+				</BlockContainer>
+			)}
 			<InputField
 				placeholder="Фамилия"
 				label="Фамилия"

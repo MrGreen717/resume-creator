@@ -5,6 +5,11 @@
 	height: 34px;
 }
 
+img {
+	max-width: 600px;
+	max-height: 400px;
+}
+
 .currencyPanel {
 	display: flex;
 	box-sizing: border-box;

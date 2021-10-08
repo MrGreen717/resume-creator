@@ -42,7 +42,6 @@ const WorkPlaceForm = ({ setData, data, setError }) => {
 	})
 
 	const onSubmit = (value) => {
-		console.log(value)
 		setData([
 			...data,
 			{ value, startDate, endDate, nowTime: showDate, id: Math.random() }
